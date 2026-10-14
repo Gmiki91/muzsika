@@ -1,0 +1,26 @@
+<a class="back-link" routerLink="/">Back to songs</a>
+
+@switch (state()) {
+  @case ('ready') {
+    @if (song(); as current) {
+      <h1>{{ current.title }}</h1>
+
+      @if (audioUrl(); as src) {
+        <audio class="player" controls preload="metadata" [src]="src"></audio>
+      } @else {
+        <p class="message">No audio is stored for this song.</p>
+      }
+
+      <div class="lyrics">{{ current.lyrics }}</div>
+    }
+  }
+  @case ('missing') {
+    <p class="message">This song is no longer in your library.</p>
+  }
+  @case ('error') {
+    <p class="message error" role="alert">Could not open this song.</p>
+  }
+  @default {
+    <p class="message">Loading…</p>
+  }
+}

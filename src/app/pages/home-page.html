@@ -1,0 +1,85 @@
+<h1>Songs</h1>
+
+@if (songs(); as list) {
+  @if (list.length === 0) {
+    <p class="empty">No songs yet. Add one to get started.</p>
+  } @else {
+    <ul class="song-list">
+      @for (song of list; track song.id) {
+        <li>
+          <a class="song-link" [routerLink]="['/song', song.id]">
+            <span class="song-title">{{ song.title }}</span>
+            <span class="song-meta">{{ formatBytes(song.audioSize) }}</span>
+          </a>
+          <button
+            type="button"
+            class="text-button danger"
+            [attr.aria-label]="'Delete ' + song.title"
+            (click)="remove(song)"
+          >
+            Delete
+          </button>
+        </li>
+      }
+    </ul>
+  }
+}
+
+@if (error(); as message) {
+  <p class="message error" role="alert">{{ message }}</p>
+}
+
+<section class="add-song">
+  @if (!formOpen()) {
+    <button type="button" class="button" (click)="toggleForm()">Add a song</button>
+  } @else {
+    <h2>Add a song</h2>
+    <form (ngSubmit)="save()">
+      <div class="field">
+        <label for="audio">Audio file</label>
+        <input
+          #fileInput
+          id="audio"
+          name="audio"
+          type="file"
+          accept="audio/*"
+          (change)="onFileChosen($event)"
+        />
+      </div>
+
+      <div class="field">
+        <label for="title">Title</label>
+        <input
+          id="title"
+          name="title"
+          type="text"
+          autocomplete="off"
+          [placeholder]="titlePlaceholder()"
+          [(ngModel)]="title"
+        />
+      </div>
+
+      <div class="field">
+        <label for="lyrics">Lyrics</label>
+        <textarea
+          id="lyrics"
+          name="lyrics"
+          autocomplete="off"
+          autocapitalize="off"
+          spellcheck="false"
+          placeholder="Paste the lyrics here"
+          [(ngModel)]="lyrics"
+        ></textarea>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="button" [disabled]="!canSave()">
+          {{ saving() ? 'Saving…' : 'Save song' }}
+        </button>
+        @if ((songs()?.length ?? 0) > 0) {
+          <button type="button" class="text-button" (click)="toggleForm()">Cancel</button>
+        }
+      </div>
+    </form>
+  }
+</section>
