@@ -4,10 +4,9 @@ The app can only be installed and work offline from an HTTPS address, and the se
 
 ## Build and host
 
-1. `npm install` (this also draws the app icons into `public/icons`)
-2. `npm run build`
-3. Upload `dist/Muzsika/browser` to any static HTTPS host (Cloudflare Pages, Netlify, GitHub Pages).
-   On a GitHub Pages project site, build with `npm run build -- --base-href /<repository-name>/`.
+1. For a local build, run `npm install` (this also draws the app icons into `public/icons`), then `npm run build`.
+2. To deploy to GitHub Pages, set **Settings > Pages > Build and deployment > Source** to **GitHub Actions** once. The workflow in `.github/workflows/deploy-pages.yml` builds and publishes the site whenever you push to `master`; the repository name is used as the base path.
+3. For another static HTTPS host (such as Cloudflare Pages or Netlify), upload the contents of `dist/Muzsika/browser`.
 
 ## What to check on the phone (Chrome on Android)
 
