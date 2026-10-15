@@ -1,0 +1,77 @@
+<div class="difficulty">
+  <label for="difficulty">Difficulty</label>
+  <input
+    id="difficulty"
+    type="range"
+    min="0"
+    max="100"
+    step="5"
+    [value]="difficulty()"
+    [disabled]="wordCount() === 0"
+    (input)="setDifficulty($event)"
+  />
+  <output for="difficulty">{{ difficulty() }}%</output>
+</div>
+<p class="hint">{{ hiddenCount() }} of {{ wordCount() }} words hidden</p>
+
+<div class="lyrics">
+  @for (line of parsed().lines; track $index) {
+    @switch (line.kind) {
+      @case ('break') {
+        <div class="stanza-break"></div>
+      }
+      @case ('label') {
+        <p class="line label">{{ line.tokens[0].text }}</p>
+      }
+      @default {
+        <p class="line">
+          @for (token of line.tokens; track $index) {
+            @if (token.word && blanks().has(token.wordIndex)) {
+              @let result = resultOf(token.wordIndex);
+              <span
+                class="blank"
+                [class.correct]="result === 'correct'"
+                [class.almost]="result === 'almost'"
+                [class.wrong]="result === 'wrong'"
+              >
+                <input
+                  #blank
+                  class="blank-input"
+                  type="text"
+                  aria-label="Missing word"
+                  autocomplete="off"
+                  autocapitalize="off"
+                  autocorrect="off"
+                  spellcheck="false"
+                  [attr.data-index]="token.wordIndex"
+                  [attr.enterkeyhint]="token.wordIndex === lastBlank() ? 'done' : 'next'"
+                  [attr.aria-invalid]="result === 'wrong' ? 'true' : null"
+                  [style.width.ch]="widthOf(token.text)"
+                  [value]="valueOf(token.wordIndex)"
+                  (input)="onInput(token.wordIndex, $event)"
+                  (keydown.enter)="onEnter($event)"
+                />
+                @if (result === 'wrong' || result === 'almost') {
+                  <span class="reveal">{{ token.text }}</span>
+                }
+              </span>
+            } @else {
+              <span>{{ token.text }}</span>
+            }
+          }
+        </p>
+      }
+    }
+  }
+</div>
+
+@if (blanks().size > 0) {
+  <div class="cloze-actions">
+    <button type="button" class="button" (click)="check()">Check answers</button>
+    <button type="button" class="text-button" (click)="clear()">Clear</button>
+  </div>
+}
+
+@if (score(); as result) {
+  <p class="message" role="status">{{ result.right }} of {{ result.total }} correct</p>
+}

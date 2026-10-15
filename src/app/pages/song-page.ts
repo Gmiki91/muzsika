@@ -1,5 +1,6 @@
 import { Component, effect, inject, input, numberAttribute, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { ClozeView } from '../cloze/cloze-view';
 import { type Song } from '../data/db';
 import { SongStore } from '../data/song-store';
 
@@ -7,7 +8,7 @@ type LoadState = 'loading' | 'ready' | 'missing' | 'error';
 
 @Component({
   selector: 'app-song-page',
-  imports: [RouterLink],
+  imports: [RouterLink, ClozeView],
   templateUrl: './song-page.html',
 })
 export class SongPage {

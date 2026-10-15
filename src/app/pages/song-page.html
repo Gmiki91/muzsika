@@ -6,12 +6,14 @@
       <h1>{{ current.title }}</h1>
 
       @if (audioUrl(); as src) {
-        <audio class="player" controls preload="metadata" [src]="src"></audio>
+        <div class="player-bar">
+          <audio class="player" controls preload="metadata" [src]="src"></audio>
+        </div>
       } @else {
         <p class="message">No audio is stored for this song.</p>
       }
 
-      <div class="lyrics">{{ current.lyrics }}</div>
+      <app-cloze-view [songId]="current.id" [lyrics]="current.lyrics" />
     }
   }
   @case ('missing') {

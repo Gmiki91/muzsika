@@ -320,3 +320,139 @@ h2 {
     color: var(--ink);
   }
 }
+
+/* Fill-in view */
+
+:root {
+  --good: #1f7a3d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --good: #7bd99a;
+  }
+}
+
+.player-bar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  margin-inline: -1rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+
+  .player {
+    margin-top: 0;
+  }
+}
+
+.difficulty {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+
+  label {
+    font-weight: 600;
+  }
+
+  output {
+    min-width: 3.5ch;
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
+
+  input[type='range'] {
+    width: 100%;
+    min-height: 2.75rem;
+    accent-color: var(--accent);
+  }
+}
+
+.hint {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+}
+
+.line {
+  margin: 0;
+  // A hanging indent shows where a long lyric line wraps onto the next row.
+  padding-inline-start: 1.25em;
+  text-indent: -1.25em;
+
+  &.label {
+    margin-top: 0.25rem;
+    padding-inline-start: 0;
+    color: var(--ink-muted);
+    font-size: 0.875em;
+    text-indent: 0;
+  }
+
+  // Taller lines leave room for the revealed word under a wrong answer.
+  &:has(.reveal) {
+    line-height: 2.6;
+  }
+}
+
+.stanza-break {
+  height: 1em;
+}
+
+.blank {
+  position: relative;
+  display: inline-block;
+  line-height: 1.4;
+  text-indent: 0;
+
+  .blank-input {
+    padding: 0 0.15em;
+    border: 0;
+    border-bottom: 2px solid var(--accent);
+    border-radius: 0;
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    color: inherit;
+    font: inherit;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .reveal {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75em;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  &.correct .blank-input,
+  &.almost .blank-input {
+    border-bottom-color: var(--good);
+    color: var(--good);
+  }
+
+  &.almost .reveal {
+    color: var(--good);
+  }
+
+  &.wrong .blank-input {
+    border-bottom-color: var(--danger);
+    color: var(--danger);
+  }
+
+  &.wrong .reveal {
+    color: var(--danger);
+    font-weight: 600;
+  }
+}
+
+.cloze-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
